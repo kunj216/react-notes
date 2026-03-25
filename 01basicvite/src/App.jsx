@@ -1,8 +1,11 @@
-const username = "kunj"
-function App() {
+import { useState } from "react"
 
+
+function App() {
+  const [count,setCount] = useState(0)
+  function increase(){setCount(count+1)}
   return (
-    <h1>vite react app {username}</h1>
+    <button onClick={()=>increase()}>{count}</button>
   )
 }
 

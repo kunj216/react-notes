@@ -401,3 +401,412 @@ Fiber schedules updates<br>
 Real DOM updated efficiently
 
 This is the core internal workflow of modern React 🧠
+
+# Props (Properties)
+
+-> Props are **inputs passed from parent component to child component** <br>
+-> Props make components **reusable and dynamic** <br>
+-> Props are **read-only (immutable)**
+
+---
+
+## Example of Props
+
+Parent Component:
+
+```jsx
+function App() {
+  return <User name="Kunj" />
+}
+```
+
+Child Component:
+
+```jsx
+function User(props) {
+  return <h1>Hello {props.name}</h1>
+}
+```
+
+Output:
+
+```html
+<h1>Hello Kunj</h1>
+```
+
+Explanation:
+
+-> Parent sends data using props <br>
+-> Child receives data using `props.name`
+
+---
+
+## Props Flow Direction
+
+Props always move:
+
+```
+Parent → Child
+```
+
+Example:
+
+```jsx
+function Parent() {
+  return <Child message="Hello React" />
+}
+
+function Child(props) {
+  return <p>{props.message}</p>
+}
+```
+
+---
+
+## Props Destructuring (Recommended Method)
+
+Instead of writing:
+
+```jsx
+function User(props) {
+  return <h1>{props.name}</h1>
+}
+```
+
+Write:
+
+```jsx
+function User({ name }) {
+  return <h1>{name}</h1>
+}
+```
+
+Cleaner and preferred practice ✨
+
+---
+
+## Props are Immutable
+
+Wrong:
+
+```jsx
+props.name = "Rahul"
+```
+
+Correct:
+
+```
+Parent updates props
+Child receives updated props automatically
+```
+
+---
+
+# State
+
+-> State stores **dynamic data inside a component** <br>
+-> State updates trigger **component re-render** <br>
+-> State is **managed using useState Hook**
+
+Example idea:
+
+```
+Props = external data
+State = internal data
+```
+
+---
+
+# useState Hook
+
+-> `useState()` is used to **create and update state inside functional components**
+
+Syntax:
+
+```jsx
+const [state, setState] = useState(initialValue)
+```
+
+---
+
+## Example of useState
+
+```jsx
+import { useState } from "react"
+
+function Counter() {
+
+  const [count, setCount] = useState(0)
+
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      {count}
+    </button>
+  )
+}
+```
+
+Explanation:
+
+-> Initial state = 0 <br>
+-> Clicking button increases count <br>
+-> Component re-renders automatically
+
+---
+
+## Multiple State Variables Example
+
+```jsx
+import { useState } from "react"
+
+function Profile() {
+
+  const [name, setName] = useState("Kunj")
+  const [age, setAge] = useState(20)
+
+  return (
+    <>
+      <h1>{name}</h1>
+      <h2>{age}</h2>
+    </>
+  )
+}
+```
+
+A component can have **multiple state variables**
+
+---
+
+## Updating State Example
+
+```jsx
+import { useState } from "react"
+
+function Counter() {
+
+  const [count, setCount] = useState(0)
+
+  function increase() {
+    setCount(count + 1)
+  }
+
+  return (
+    <button onClick={increase}>
+      Increase
+    </button>
+  )
+}
+```
+
+---
+
+# Hooks
+
+-> Hooks allow functional components to **use React features like state and lifecycle methods** <br>
+-> Hooks were introduced in **React 16.8**
+
+Common hooks:
+
+```
+useState
+useEffect
+useContext
+useRef
+useMemo
+useCallback
+```
+
+Most commonly used:
+
+```
+useState
+useEffect
+```
+
+---
+
+# useEffect Hook
+
+-> `useEffect()` handles **side effects inside components**
+
+Side effects include:
+
+```
+API calls
+Timers
+Event listeners
+DOM updates
+Subscriptions
+```
+
+Syntax:
+
+```jsx
+useEffect(() => {
+
+  logic here
+
+}, [dependency])
+```
+
+---
+
+## Example of useEffect
+
+```jsx
+import { useEffect } from "react"
+
+function Example() {
+
+  useEffect(() => {
+    console.log("Component Loaded")
+  }, [])
+
+  return <h1>Hello</h1>
+}
+```
+
+Explanation:
+
+-> Runs only once after component loads
+
+---
+
+## Dependency Array Behavior
+
+Case 1:
+
+```jsx
+useEffect(() => {}, [])
+```
+
+Runs:
+
+```
+only once (component mount)
+```
+
+---
+
+Case 2:
+
+```jsx
+useEffect(() => {}, [value])
+```
+
+Runs:
+
+```
+whenever value changes
+```
+
+---
+
+Case 3:
+
+```jsx
+useEffect(() => {})
+```
+
+Runs:
+
+```
+every render
+```
+
+---
+
+# Rules of Hooks
+
+Rule 1:
+
+```
+only call hooks at top level
+```
+
+Correct:
+
+```jsx
+useState()
+```
+
+Wrong:
+
+```jsx
+if(condition){
+  useState()
+}
+```
+
+---
+
+Rule 2:
+
+```
+only call hooks inside React components
+```
+
+Allowed:
+
+```
+functional components
+custom hooks
+```
+
+Not allowed:
+
+```
+loops
+conditions
+nested functions
+normal javascript functions
+```
+
+---
+
+# Props vs State Difference
+
+Props:
+
+```
+passed from parent component
+read-only
+used for communication
+```
+
+State:
+
+```
+managed inside component
+can be updated
+controls component behavior
+```
+
+Shortcut idea:
+
+```
+props = function parameters
+state = local variables
+```
+
+---
+
+# Rendering Flow with Props and State
+
+React workflow:
+
+```
+Parent sends props
+↓
+Child receives props
+↓
+State updates using hooks
+↓
+Component re-renders
+↓
+Virtual DOM updates
+↓
+Real DOM updates efficiently
+```
+
+This is the **core workflow of modern functional React components** 🚀
