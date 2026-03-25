@@ -22,3 +22,167 @@ React Native is an open-source framework used to build native mobile application
 
 # Rules for vite
 1. files which export components should have jsx extension and their function names should have first letter in uppercase.
+
+# React Internal Working — Short Notes
+what react actually is
+
+-> <b>React</b> is a JavaScript library used to build user interfaces (UI)
+-> React lets us describe UI using components instead of manual DOM manipulation
+-> React converts JS objects → real DOM elements
+
+problem with vanilla javascript DOM
+
+Example:
+
+document.createElement()<br>
+setAttribute()<br>
+appendChild()
+
+Issues:
+
+-> too much manual work<br>
+-> hard to manage large apps<br>
+-> updating UI becomes complex
+
+React solves this using declarative UI
+
+# react element concept
+
+React elements are just JavaScript objects
+
+Example structure:
+
+{<br>
+ type: "a",<br>
+ props: {<br>
+   href: "https://google.com"/<br>
+ },<br>
+ children: "Click me"<br>
+}
+
+This represents:
+
+`<a href="https://google.com">Click me</a>`
+
+React converts this object into real DOM automatically
+
+# Custom renderer concept
+
+React internally performs steps like:
+
+create element->
+add attributes->
+add children->
+insert into DOM
+
+Example logic:
+
+function customRender(element, container) {
+
+ const domElement = document.createElement(element.type)
+
+ domElement.innerHTML = element.children
+
+ domElement.setAttribute("href", element.props.href)
+
+ container.appendChild(domElement)
+
+}
+
+React does this automatically behind the scenes ⚙️
+
+# Root container concept
+
+React renders everything inside a root element
+
+Example:
+
+`<div id="root"></div>`
+
+Then React injects UI inside it:
+
+ReactDOM.createRoot(root).render(`<App />`)
+
+Root acts as entry point 🚀
+
+# jsx concept (most important)
+
+JSX looks like HTML but it is not HTML
+
+Example:
+
+`<h1>Hello</h1>`
+
+JSX converts into:
+
+React.createElement("h1", null, "Hello")
+
+So:
+
+JSX → JavaScript function call → React object → DOM
+
+why babel is required
+
+Browsers cannot understand JSX directly
+
+So Babel converts:
+
+JSX
+
+into:
+
+React.createElement()
+
+Flow:
+
+JSX → Babel → React.createElement → DOM
+react.createElement syntax
+
+Example:
+
+React.createElement(
+ "a",
+ { href: "https://google.com" },
+ "Click me"
+)
+
+Parameters:
+
+1️⃣ element type
+2️⃣ props object
+3️⃣ children
+
+Equivalent JSX:
+
+`<a href="https://google.com">Click me</a>`
+rendering flow of react
+
+Actual internal flow:
+
+JSX<br>
+ ↓<br>
+React.createElement()<br>
+ ↓<br>
+React element object<br>
+ ↓<br>
+ReactDOM.render()<br>
+ ↓<br>
+Browser DOM
+
+This is the core rendering pipeline 🧠
+
+# virtual dom concept
+
+React does NOT update real DOM directly
+
+Instead:
+
+create virtual DOM copy
+compare with previous version
+update only changed parts
+
+Benefits:
+
+-> faster updates<br>
+-> better performance<br>
+-> efficient UI rendering
