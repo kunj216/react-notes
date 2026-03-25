@@ -186,3 +186,218 @@ Benefits:
 -> faster updates<br>
 -> better performance<br>
 -> efficient UI rendering
+
+# Virtual DOM
+
+-> Virtual DOM is a lightweight JavaScript copy of the real browser DOM
+
+Instead of directly updating the browser DOM:
+
+React updates Virtual DOM first
+then updates only required changes in real DOM
+why virtual dom is needed
+
+Updating real DOM directly is slow
+
+Example:
+
+change 1 element
+browser may repaint large portion of UI
+
+React solution:
+
+update virtual dom<br>
+compare old vs new virtual dom<br>
+update only changed parts
+
+Result:
+
+-> faster rendering<br>
+-> better performance<br>
+-> optimized UI updates ⚡
+
+working of virtual dom
+
+Flow:
+
+UI change happens<br>
+↓<br>
+new virtual dom created<br>
+↓<br>
+compare with old virtual dom<br>
+↓<br>
+detect differences<br>
+↓<br>
+update only changed nodes in real DOM
+
+This comparison process is called Reconciliation
+
+# Reconciliation
+
+-> Reconciliation is the process of comparing old Virtual DOM with new Virtual DOM
+
+Purpose:
+
+find what changed in UI
+update only that part
+
+Instead of:
+
+reload entire page
+
+React does:
+
+update only modified components
+reconciliation example
+
+Example:
+
+Old Virtual DOM:
+
+`<h1>Hello</h1>`
+
+New Virtual DOM:
+
+`<h1>Hello Kunj</h1>`
+
+React detects:
+
+only text changed
+
+So React updates:
+
+only text node
+not entire element
+
+Efficient update 🚀
+
+# reconciliation rules react follows
+1. Rule 1<br>
+different element type → replace entire element
+
+Example:
+
+`<h1>` → `<p>`
+
+Entire node replaced
+
+2. Rule 2<br>
+same element type → update attributes only
+
+Example:
+
+`<h1 class="a">` → `<h1 class="b">`
+
+Only class changes
+
+3. Rule 3<br>
+lists require keys
+
+Keys help React identify:
+
+which item changed<br>
+which item moved<br>
+which item deleted
+
+Example:
+
+items.map(item =>
+  `<li key={item.id}>{item.name}</li>`
+)
+
+Keys improve reconciliation performance ⚡
+
+# React Fiber Architecture
+
+-> Fiber is the new reconciliation engine of React
+
+Introduced in:
+
+React 16
+
+Purpose:
+
+make rendering faster<br>
+make rendering interruptible<br>
+support smoother UI updates<br>
+problem before fiber
+
+Before Fiber:
+
+React rendering was synchronous
+
+Meaning:
+
+once rendering starts
+cannot stop until finished
+
+Result:
+
+UI freeze possible in large apps
+solution using fiber
+
+Fiber makes rendering:
+
+asynchronous<br>
+interruptible<br>
+prioritized
+
+React can now:
+
+pause rendering<br>
+resume rendering<br>
+cancel rendering<br>
+reuse rendering work
+
+Result:
+
+smoother user experience
+# How fiber works internally
+
+React divides work into small units called fibers
+
+Instead of:
+
+render everything at once
+
+React does:
+
+render small pieces step-by-step
+
+So browser stays responsive
+
+benefits of fiber architecture
+
+Fiber enables:
+
+concurrent rendering<br>
+better animations<br>
+smoother scrolling<br>
+priority-based updates<br>
+background rendering support
+
+Example priority:
+
+button click → high priority<br>
+animation → medium priority<br>
+data loading → low priority
+
+React processes high priority updates first ⚡
+
+complete internal rendering flow (important)
+
+Final pipeline:
+
+JSX<br>
+↓<br>
+React.createElement()<br>
+↓<br>
+Virtual DOM created<br>
+↓<br>
+Reconciliation process<br>
+↓<br>
+Fiber schedules updates<br>
+↓<br>
+Real DOM updated efficiently
+
+This is the core internal workflow of modern React 🧠
