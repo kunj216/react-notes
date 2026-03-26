@@ -810,3 +810,446 @@ Real DOM updates efficiently
 ```
 
 This is the **core workflow of modern functional React components** 🚀
+---
+
+# React Hooks
+
+Hooks allow functional components to **use state, lifecycle features, and performance optimizations** <br>
+
+Commonly used hooks:
+
+```
+useState
+useEffect
+useRef
+useCallback
+```
+
+---
+
+# useState Hook
+
+-> `useState()` is used to **store and update data inside a component** <br>
+-> Updating state automatically **re-renders the component**
+
+Syntax:
+
+```jsx
+const [state, setState] = useState(initialValue)
+```
+
+---
+
+## Example of useState
+
+```jsx
+import { useState } from "react"
+
+function Counter() {
+
+  const [count, setCount] = useState(0)
+
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      Count: {count}
+    </button>
+  )
+}
+```
+
+Explanation:
+
+-> Initial state = `0` <br>
+-> Clicking button updates state <br>
+-> Component re-renders automatically
+
+---
+
+## Multiple State Variables Example
+
+```jsx
+import { useState } from "react"
+
+function Profile() {
+
+  const [name, setName] = useState("Kunj")
+  const [age, setAge] = useState(20)
+
+  return (
+    <>
+      <h1>{name}</h1>
+      <h2>{age}</h2>
+    </>
+  )
+}
+```
+
+A component can have **multiple state variables**
+
+---
+
+## Updating State Using Previous Value
+
+Recommended approach when state depends on previous state:
+
+```jsx
+setCount(prevCount => prevCount + 1)
+```
+
+Example:
+
+```jsx
+function Counter() {
+
+  const [count, setCount] = useState(0)
+
+  function increase() {
+    setCount(prev => prev + 1)
+  }
+
+  return (
+    <button onClick={increase}>
+      Increase
+    </button>
+  )
+}
+```
+
+---
+
+# useEffect Hook
+
+-> `useEffect()` is used to **handle side effects inside components** <br>
+-> Runs after component render
+
+Side effects include:
+
+```
+API calls
+Timers
+Event listeners
+Subscriptions
+DOM updates
+```
+
+Syntax:
+
+```jsx
+useEffect(() => {
+
+  logic here
+
+}, [dependency])
+```
+
+---
+
+## Example of useEffect
+
+```jsx
+import { useEffect } from "react"
+
+function Example() {
+
+  useEffect(() => {
+    console.log("Component mounted")
+  }, [])
+
+  return <h1>Hello React</h1>
+}
+```
+
+Explanation:
+
+-> Runs only once after component loads
+
+---
+
+## Dependency Array Behavior
+
+Case 1:
+
+```jsx
+useEffect(() => {}, [])
+```
+
+Runs:
+
+```
+only once (component mount)
+```
+
+---
+
+Case 2:
+
+```jsx
+useEffect(() => {}, [value])
+```
+
+Runs:
+
+```
+whenever value changes
+```
+
+---
+
+Case 3:
+
+```jsx
+useEffect(() => {})
+```
+
+Runs:
+
+```
+after every render
+```
+
+---
+
+## Cleanup Function Example
+
+Cleanup prevents memory leaks
+
+Example:
+
+```jsx
+import { useEffect } from "react"
+
+function Timer() {
+
+  useEffect(() => {
+
+    const interval = setInterval(() => {
+      console.log("Running...")
+    }, 1000)
+
+    return () => {
+      clearInterval(interval)
+    }
+
+  }, [])
+
+  return <h1>Timer Running</h1>
+}
+```
+
+Cleanup runs when component **unmounts**
+
+---
+
+# useRef Hook
+
+-> `useRef()` stores a **mutable reference value** <br>
+-> Updating ref **does NOT re-render component**
+
+Used for:
+
+```
+access DOM elements
+store previous values
+persist values between renders
+```
+
+Syntax:
+
+```jsx
+const refName = useRef(initialValue)
+```
+
+---
+
+## Example: Access DOM Element
+
+```jsx
+import { useRef } from "react"
+
+function InputFocus() {
+
+  const inputRef = useRef()
+
+  function focusInput() {
+    inputRef.current.focus()
+  }
+
+  return (
+    <>
+      <input ref={inputRef} />
+      <button onClick={focusInput}>
+        Focus Input
+      </button>
+    </>
+  )
+}
+```
+
+Explanation:
+
+-> `useRef` stores reference to input element <br>
+-> Button click focuses input
+
+---
+
+## Example: Store Value Without Re-render
+
+```jsx
+import { useRef } from "react"
+
+function Counter() {
+
+  const countRef = useRef(0)
+
+  function increase() {
+    countRef.current += 1
+    console.log(countRef.current)
+  }
+
+  return (
+    <button onClick={increase}>
+      Increase Ref Count
+    </button>
+  )
+}
+```
+
+Component does **not re-render**
+
+---
+
+# useCallback Hook
+
+-> `useCallback()` memoizes a function <br>
+-> Prevents unnecessary function re-creation during re-render <br>
+-> Improves performance in optimized components
+
+Syntax:
+
+```jsx
+const memoizedFunction = useCallback(() => {
+
+}, [dependencies])
+```
+
+---
+
+## Example of useCallback
+
+```jsx
+import { useState, useCallback } from "react"
+
+function Counter() {
+
+  const [count, setCount] = useState(0)
+
+  const increase = useCallback(() => {
+    setCount(prev => prev + 1)
+  }, [])
+
+  return (
+    <button onClick={increase}>
+      Increase
+    </button>
+  )
+}
+```
+
+Explanation:
+
+-> Function recreated only when dependencies change <br>
+-> Helps avoid unnecessary renders
+
+---
+
+## Why useCallback is Needed
+
+Normally:
+
+```
+function recreated every render
+```
+
+With useCallback:
+
+```
+function reused between renders
+```
+
+Useful when passing functions to:
+
+```
+child components
+React.memo components
+event-heavy components
+```
+
+---
+
+# Difference Between useRef and useState
+
+useState:
+
+```
+stores value
+triggers re-render
+used for UI updates
+```
+
+useRef:
+
+```
+stores value
+does NOT trigger re-render
+used for DOM reference or persistent values
+```
+
+---
+
+# When to Use Which Hook
+
+useState:
+
+```
+store UI-related data
+```
+
+useEffect:
+
+```
+handle side effects
+```
+
+useRef:
+
+```
+access DOM or store persistent value
+```
+
+useCallback:
+
+```
+optimize function performance
+```
+
+---
+
+# Hooks Execution Flow
+
+React workflow:
+
+```
+Component renders
+↓
+useState manages data
+↓
+useEffect handles side effects
+↓
+useRef stores persistent values
+↓
+useCallback optimizes functions
+↓
+Component updates efficiently
+```
+
+This forms the **core hook workflow inside modern React functional components** 🚀
