@@ -1253,3 +1253,334 @@ Component updates efficiently
 ```
 
 This forms the **core hook workflow inside modern React functional components** 🚀
+---
+
+# useId Hook
+
+-> `useId()` generates a **unique stable ID inside React components** <br>
+-> Mainly used for **accessibility attributes like label + input linking** <br>
+-> Prevents ID conflicts when multiple components render
+
+Introduced in:
+
+```
+React 18
+```
+
+---
+
+## Syntax of useId
+
+```jsx
+const id = useId()
+```
+
+---
+
+## Example of useId
+
+```jsx
+import { useId } from "react"
+
+function LoginForm() {
+
+  const id = useId()
+
+  return (
+    <>
+      <label htmlFor={id}>Username</label>
+      <input id={id} type="text" />
+    </>
+  )
+}
+```
+
+Explanation:
+
+-> `useId()` generates unique ID automatically <br>
+-> Connects `label` with `input` correctly <br>
+-> Improves accessibility
+
+---
+
+## Example with Multiple Inputs
+
+```jsx
+import { useId } from "react"
+
+function SignupForm() {
+
+  const usernameId = useId()
+  const passwordId = useId()
+
+  return (
+    <>
+      <label htmlFor={usernameId}>Username</label>
+      <input id={usernameId} />
+
+      <label htmlFor={passwordId}>Password</label>
+      <input id={passwordId} type="password" />
+    </>
+  )
+}
+```
+
+Each input receives **unique stable ID**
+
+---
+
+## Why useId is Needed
+
+Without `useId()`:
+
+```
+manual id conflicts possible
+duplicate id errors possible
+accessibility issues possible
+```
+
+With `useId()`:
+
+```
+automatic unique ids generated
+safe for reusable components
+works with server rendering
+```
+
+---
+
+## Important Rule of useId
+
+```
+do not use useId() for list keys
+```
+
+Wrong:
+
+```jsx
+items.map(item => (
+  <li key={useId()}>{item}</li>
+))
+```
+
+Correct:
+
+```jsx
+items.map(item => (
+  <li key={item.id}>{item.name}</li>
+))
+```
+
+---
+
+# Custom Hooks
+
+-> Custom Hooks are **user-defined reusable functions built using React hooks** <br>
+-> Used to **share logic between multiple components**
+
+Naming rule:
+
+```
+must start with "use"
+```
+
+Example:
+
+```
+useFetch
+useToggle
+useAuth
+useLocalStorage
+```
+
+---
+
+## Why Custom Hooks are Needed
+
+Without custom hooks:
+
+```
+duplicate logic in multiple components
+code becomes hard to manage
+```
+
+With custom hooks:
+
+```
+logic reusable
+clean components
+better structure
+```
+
+---
+
+## Example of Custom Hook
+
+Example: Toggle Hook
+
+```jsx
+import { useState } from "react"
+
+function useToggle(initialValue = false) {
+
+  const [value, setValue] = useState(initialValue)
+
+  function toggle() {
+    setValue(prev => !prev)
+  }
+
+  return [value, toggle]
+}
+```
+
+Usage inside component:
+
+```jsx
+function App() {
+
+  const [isVisible, toggleVisible] = useToggle()
+
+  return (
+    <>
+      <button onClick={toggleVisible}>
+        Toggle
+      </button>
+
+      {isVisible && <h1>Hello React</h1>}
+    </>
+  )
+}
+```
+
+Explanation:
+
+-> Custom hook stores toggle logic <br>
+-> Component reuses logic easily
+
+---
+
+## Example Custom Hook: useFetch
+
+Reusable API fetch hook
+
+```jsx
+import { useState, useEffect } from "react"
+
+function useFetch(url) {
+
+  const [data, setData] = useState(null)
+
+  useEffect(() => {
+
+    fetch(url)
+      .then(res => res.json())
+      .then(data => setData(data))
+
+  }, [url])
+
+  return data
+}
+```
+
+Usage:
+
+```jsx
+function Users() {
+
+  const data = useFetch("https://jsonplaceholder.typicode.com/users")
+
+  return (
+    <>
+      {data &&
+        data.map(user => (
+          <p key={user.id}>{user.name}</p>
+        ))
+      }
+    </>
+  )
+}
+```
+
+---
+
+## Rules of Custom Hooks
+
+Rule 1:
+
+```
+must start with "use"
+```
+
+Rule 2:
+
+```
+can call other hooks inside custom hooks
+```
+
+Example:
+
+```jsx
+useState
+useEffect
+useRef
+```
+
+Rule 3:
+
+```
+must follow rules of hooks
+```
+
+Meaning:
+
+```
+call only at top level
+call inside React function
+```
+
+---
+
+# Difference Between Normal Function and Custom Hook
+
+Normal Function:
+
+```
+cannot use React hooks inside
+```
+
+Custom Hook:
+
+```
+can use React hooks inside
+returns reusable logic
+```
+
+Example:
+
+```jsx
+function helperFunction() {
+  // cannot use useState here
+}
+```
+
+```jsx
+function useHelperFunction() {
+  // allowed to use useState here
+}
+```
+
+---
+
+# When to Use Custom Hooks
+
+Use custom hooks when:
+
+```
+same logic repeated in multiple components
+API calls repeated
+form handling repeated
+toggle logic repeated
+authentication logic repeated
+```
+
+Custom hooks make React apps **scalable and clean** 🚀
