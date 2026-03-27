@@ -1584,3 +1584,649 @@ authentication logic repeated
 ```
 
 Custom hooks make React apps **scalable and clean** 🚀
+
+---
+
+# React Router
+
+-> React Router is used to **navigate between different pages inside a React application without reloading the page** <br>
+-> Helps create **Single Page Applications (SPA)**
+
+Without React Router:
+
+```
+page reload happens on navigation
+slow experience
+state resets
+```
+
+With React Router:
+
+```
+navigation without reload
+fast experience
+state preserved
+```
+
+---
+
+# Single Page Application (SPA)
+
+-> SPA loads **only one HTML file** <br>
+-> React updates UI dynamically without refreshing page
+
+Example:
+
+```
+Home → About → Contact
+```
+
+Page changes without refresh
+
+---
+
+# Installing React Router
+
+Install React Router:
+
+```bash
+npm install react-router-dom
+```
+
+Import inside project:
+
+```jsx
+import { BrowserRouter } from "react-router-dom"
+```
+
+---
+
+# BrowserRouter
+
+-> `BrowserRouter` enables routing in React application <br>
+-> Wrap entire application inside it
+
+Example:
+
+```jsx
+import React from "react"
+import ReactDOM from "react-dom/client"
+import App from "./App"
+import { BrowserRouter } from "react-router-dom"
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+
+)
+```
+
+Now routing works across entire app
+
+---
+
+# Routes Component
+
+-> `Routes` is used to define multiple routes inside application
+
+Example:
+
+```jsx
+import { Routes } from "react-router-dom"
+```
+
+Used as container for all routes
+
+---
+
+# Route Component
+
+-> `Route` defines **path + component mapping**
+
+Example:
+
+```jsx
+import { Routes, Route } from "react-router-dom"
+import Home from "./Home"
+import About from "./About"
+
+function App() {
+
+  return (
+
+    <Routes>
+
+      <Route path="/" element={<Home />} />
+
+      <Route path="/about" element={<About />} />
+
+    </Routes>
+
+  )
+}
+```
+
+Meaning:
+
+```
+/ → Home component
+/about → About component
+```
+
+---
+
+# Link Component
+
+-> `Link` is used for navigation between pages <br>
+-> Prevents full page reload
+
+Example:
+
+```jsx
+import { Link } from "react-router-dom"
+
+function Navbar() {
+
+  return (
+
+    <>
+      <Link to="/">Home</Link>
+
+      <Link to="/about">About</Link>
+    </>
+
+  )
+}
+```
+
+---
+
+# NavLink Component
+
+-> `NavLink` works like `Link` <br>
+-> Adds styling automatically for active route
+
+Example:
+
+```jsx
+import { NavLink } from "react-router-dom"
+
+<NavLink to="/about">
+  About
+</NavLink>
+```
+
+Active route styling supported
+
+Example:
+
+```jsx
+<NavLink
+  to="/about"
+  style={({ isActive }) => ({
+    color: isActive ? "red" : "black"
+  })}
+>
+  About
+</NavLink>
+```
+
+---
+
+# Layout Component
+
+-> Layout component creates **common UI structure across pages**
+
+Example:
+
+```
+Navbar
+Footer
+Sidebar
+```
+
+Shared across all routes
+
+Example:
+
+```jsx
+import { Outlet } from "react-router-dom"
+
+function Layout() {
+
+  return (
+
+    <>
+      <Navbar />
+
+      <Outlet />
+
+      <Footer />
+    </>
+
+  )
+}
+```
+
+`Outlet` renders child route content
+
+---
+
+# Nested Routing
+
+-> Nested routing means **routes inside routes**
+
+Example structure:
+
+```
+/dashboard
+/dashboard/profile
+/dashboard/settings
+```
+
+Example:
+
+```jsx
+<Routes>
+
+  <Route path="/" element={<Layout />}>
+
+    <Route path="about" element={<About />} />
+
+    <Route path="contact" element={<Contact />} />
+
+  </Route>
+
+</Routes>
+```
+
+Layout stays constant
+
+Content changes inside `Outlet`
+
+---
+
+# Outlet Component
+
+-> `Outlet` renders child route inside parent layout
+
+Example:
+
+```jsx
+import { Outlet } from "react-router-dom"
+
+function Layout() {
+
+  return (
+
+    <>
+      <Navbar />
+
+      <Outlet />
+
+    </>
+
+  )
+}
+```
+
+Acts like placeholder for child route UI
+
+---
+
+# Dynamic Routing
+
+-> Dynamic routing handles URLs with changing values
+
+Example:
+
+```
+/user/1
+/user/2
+/user/3
+```
+
+Example route:
+
+```jsx
+<Route path="/user/:id" element={<User />} />
+```
+
+`:id` is dynamic parameter
+
+---
+
+# useParams Hook
+
+-> `useParams()` extracts dynamic values from URL
+
+Example:
+
+```jsx
+import { useParams } from "react-router-dom"
+
+function User() {
+
+  const { id } = useParams()
+
+  return <h1>User ID: {id}</h1>
+}
+```
+
+If URL:
+
+```
+/user/5
+```
+
+Output:
+
+```
+User ID: 5
+```
+
+---
+
+# useNavigate Hook
+
+-> `useNavigate()` is used for **programmatic navigation**
+
+Example:
+
+```jsx
+import { useNavigate } from "react-router-dom"
+
+function Home() {
+
+  const navigate = useNavigate()
+
+  return (
+
+    <button onClick={() => navigate("/about")}>
+      Go to About Page
+    </button>
+
+  )
+}
+```
+
+Used when navigation happens via:
+
+```
+button click
+form submit
+API success
+login redirect
+```
+
+---
+
+# React Router Navigation Flow
+
+Routing workflow:
+
+```
+BrowserRouter
+↓
+Routes
+↓
+Route
+↓
+Layout
+↓
+Outlet
+↓
+Child Components Render
+```
+
+This is the **core routing architecture of React Router** 🚀
+
+---
+
+# useLoaderData Hook
+
+-> `useLoaderData()` is used to **access data fetched by a route loader function** <br>
+-> It allows fetching data **before component renders** <br>
+-> Part of **React Router Data APIs (v6.4+)**
+
+Purpose:
+
+```
+fetch data before page loads
+avoid loading delays inside component
+better user experience
+```
+
+---
+
+# What is a Loader Function
+
+-> Loader function runs **before route renders** <br>
+-> Used to fetch data from API or database
+
+Example:
+
+```jsx
+export const userLoader = async () => {
+
+  const response = await fetch(
+    "https://jsonplaceholder.typicode.com/users"
+  )
+
+  return response.json()
+
+}
+```
+
+This function fetches data **before component loads**
+
+---
+
+# Connecting Loader with Route
+
+Loader function is attached inside route configuration
+
+Example:
+
+```jsx
+import { createBrowserRouter } from "react-router-dom"
+import Users from "./Users"
+import { userLoader } from "./Users"
+
+const router = createBrowserRouter([
+  {
+    path: "/users",
+    element: <Users />,
+    loader: userLoader
+  }
+])
+```
+
+Meaning:
+
+```
+route loads
+↓
+loader runs first
+↓
+data fetched
+↓
+component renders
+```
+
+---
+
+# Using useLoaderData Inside Component
+
+`useLoaderData()` reads loader data inside component
+
+Example:
+
+```jsx
+import { useLoaderData } from "react-router-dom"
+
+function Users() {
+
+  const users = useLoaderData()
+
+  return (
+
+    <>
+      {
+        users.map(user => (
+          <p key={user.id}>{user.name}</p>
+        ))
+      }
+    </>
+
+  )
+}
+```
+
+Explanation:
+
+```
+loader fetches data
+↓
+useLoaderData receives data
+↓
+component displays data
+```
+
+---
+
+# Why useLoaderData is Better than useEffect Fetching
+
+Traditional method:
+
+```jsx
+useEffect(() => {
+  fetchData()
+}, [])
+```
+
+Problem:
+
+```
+component renders first
+then data loads later
+causes loading delay
+```
+
+Loader method:
+
+```
+data loads first
+then component renders
+better UX
+cleaner architecture
+```
+
+---
+
+# Example Complete Flow
+
+Step 1: Loader Function
+
+```jsx
+export const productLoader = async () => {
+
+  const response = await fetch(
+    "https://jsonplaceholder.typicode.com/posts"
+  )
+
+  return response.json()
+
+}
+```
+
+---
+
+Step 2: Route Configuration
+
+```jsx
+{
+  path: "/products",
+  element: <Products />,
+  loader: productLoader
+}
+```
+
+---
+
+Step 3: Access Data in Component
+
+```jsx
+import { useLoaderData } from "react-router-dom"
+
+function Products() {
+
+  const products = useLoaderData()
+
+  return (
+
+    <>
+      {
+        products.map(product => (
+          <p key={product.id}>{product.title}</p>
+        ))
+      }
+    </>
+
+  )
+}
+```
+
+---
+
+# Benefits of useLoaderData
+
+```
+fetches data before rendering
+reduces loading flicker
+cleaner component structure
+centralized data fetching
+better routing architecture
+```
+
+---
+
+# Difference Between useEffect and useLoaderData
+
+useEffect:
+
+```
+runs after component renders
+data fetched inside component
+causes loading delay
+```
+
+useLoaderData:
+
+```
+runs before component renders
+data fetched by router
+component receives ready data
+```
+
+---
+
+# React Router Data Loading Flow
+
+Modern routing workflow:
+
+```
+User navigates to route
+↓
+Loader function runs
+↓
+Data fetched
+↓
+Component renders
+↓
+useLoaderData provides data
+```
+
+This is the **modern recommended data-fetching pattern in React Router v6.4+** 🚀
