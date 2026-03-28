@@ -2230,3 +2230,388 @@ useLoaderData provides data
 ```
 
 This is the **modern recommended data-fetching pattern in React Router v6.4+** 🚀
+---
+
+# Context API in React
+
+-> Context API is used to **share data globally between components** <br>
+-> Helps avoid **prop drilling problem** <br>
+-> Allows data access without passing props manually at every level
+
+Example shared data:
+
+```
+theme
+user authentication
+language preference
+global settings
+```
+
+---
+
+# Problem Without Context API (Prop Drilling)
+
+Prop drilling means:
+
+```
+passing props through multiple intermediate components
+even if they don't use the data
+```
+
+Example:
+
+```jsx
+function App() {
+  return <Parent name="Kunj" />
+}
+
+function Parent(props) {
+  return <Child name={props.name} />
+}
+
+function Child(props) {
+  return <GrandChild name={props.name} />
+}
+
+function GrandChild(props) {
+  return <h1>{props.name}</h1>
+}
+```
+
+Problem:
+
+```
+Parent and Child do not need name
+but still must pass it forward
+```
+
+Context API solves this problem
+
+---
+
+# Context API Workflow
+
+Context API works in **3 steps**
+
+```
+1. Create Context
+2. Provide Context
+3. Consume Context
+```
+
+---
+
+# Step 1: Create Context
+
+Create context using `createContext()`
+
+Example:
+
+```jsx
+import { createContext } from "react"
+
+const UserContext = createContext()
+```
+
+Now context is ready
+
+---
+
+# Step 2: Provide Context
+
+Wrap components inside **Provider**
+
+Example:
+
+```jsx
+import { createContext } from "react"
+
+export const UserContext = createContext()
+
+function App() {
+
+  const user = "Kunj"
+
+  return (
+
+    <UserContext.Provider value={user}>
+      <Child />
+    </UserContext.Provider>
+
+  )
+}
+```
+
+Explanation:
+
+```
+value prop stores global data
+all child components can access it
+```
+
+---
+
+# Step 3: Consume Context using useContext Hook
+
+Access context inside child component
+
+Example:
+
+```jsx
+import { useContext } from "react"
+import { UserContext } from "./App"
+
+function Child() {
+
+  const user = useContext(UserContext)
+
+  return <h1>Hello {user}</h1>
+}
+```
+
+Now data accessed directly without props
+
+---
+
+# Complete Context API Example
+
+Example:
+
+```jsx
+import { createContext, useContext } from "react"
+
+const UserContext = createContext()
+
+function App() {
+
+  const user = "Kunj"
+
+  return (
+
+    <UserContext.Provider value={user}>
+      <Profile />
+    </UserContext.Provider>
+
+  )
+}
+
+function Profile() {
+
+  const user = useContext(UserContext)
+
+  return <h1>Welcome {user}</h1>
+}
+
+export default App
+```
+
+Output:
+
+```
+Welcome Kunj
+```
+
+---
+
+# Passing Objects using Context API
+
+Context can pass objects also
+
+Example:
+
+```jsx
+const user = {
+  name: "Kunj",
+  age: 20
+}
+```
+
+Provider:
+
+```jsx
+<UserContext.Provider value={user}>
+```
+
+Consumer:
+
+```jsx
+const user = useContext(UserContext)
+
+return <h1>{user.name}</h1>
+```
+
+---
+
+# Multiple Values in Context
+
+Example:
+
+```jsx
+const userData = {
+  name: "Kunj",
+  age: 20,
+  isLoggedIn: true
+}
+```
+
+Provider:
+
+```jsx
+<UserContext.Provider value={userData}>
+```
+
+Consumer:
+
+```jsx
+const data = useContext(UserContext)
+
+return <h1>{data.name}</h1>
+```
+
+---
+
+# Updating Context Data
+
+Context works with `useState`
+
+Example:
+
+```jsx
+import { createContext, useState } from "react"
+
+export const UserContext = createContext()
+
+function App() {
+
+  const [user, setUser] = useState("Kunj")
+
+  return (
+
+    <UserContext.Provider value={{ user, setUser }}>
+      <Profile />
+    </UserContext.Provider>
+
+  )
+}
+```
+
+Consumer component:
+
+```jsx
+import { useContext } from "react"
+import { UserContext } from "./App"
+
+function Profile() {
+
+  const { user, setUser } = useContext(UserContext)
+
+  return (
+
+    <>
+      <h1>{user}</h1>
+
+      <button onClick={() => setUser("Rahul")}>
+        Change Name
+      </button>
+    </>
+  )
+}
+```
+
+State updates globally
+
+---
+
+# useContext Hook
+
+-> `useContext()` reads data from Context Provider <br>
+-> Works only inside components wrapped with Provider
+
+Syntax:
+
+```jsx
+const value = useContext(ContextName)
+```
+
+Example:
+
+```jsx
+const user = useContext(UserContext)
+```
+
+---
+
+# Benefits of Context API
+
+```
+removes prop drilling
+simplifies global state management
+improves code readability
+centralized data access
+```
+
+---
+
+# When to Use Context API
+
+Use Context when:
+
+```
+authentication data
+theme switching (dark/light mode)
+language selection
+global settings
+user profile data
+```
+
+Avoid Context when:
+
+```
+data needed by only 1–2 components
+```
+
+---
+
+# Context API vs Props
+
+Props:
+
+```
+passed component to component manually
+best for small data sharing
+```
+
+Context API:
+
+```
+shared globally
+avoids prop drilling
+best for large applications
+```
+
+Shortcut idea:
+
+```
+props = local sharing
+context = global sharing
+```
+
+---
+
+# Context API Flow
+
+React workflow:
+
+```
+createContext()
+↓
+Provider wraps components
+↓
+value passed globally
+↓
+useContext() reads value
+↓
+component updates automatically
+```
+
+This is the **core working architecture of Context API in React** 🚀
